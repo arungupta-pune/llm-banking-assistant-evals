@@ -4,10 +4,8 @@ from google import genai
 from google.genai import types
 from dotenv import load_dotenv
 
-# Initialize environment
 load_dotenv()
 
-# The client automatically resolves GEMINI_API_KEY from the environment
 client = genai.Client()
 
 SYSTEM_PROMPT = """You are a customer-support assistant for a retail bank.
@@ -26,14 +24,13 @@ def ask(question: str, fact_sheet: str | None = None) -> str:
     if fact_sheet is None:
         fact_sheet = load_fact_sheet()
         
-    # Generate content using the modern API structure
     response = client.models.generate_content(
         model="gemini-2.5-flash",
         contents=question,
         config=types.GenerateContentConfig(
             system_instruction=SYSTEM_PROMPT.format(fact_sheet=fact_sheet),
             max_output_tokens=300,
-            temperature=0.0  # Zero temperature ensures stable, testable output
+            temperature=0.0  
         )
     )
     
@@ -42,6 +39,6 @@ def ask(question: str, fact_sheet: str | None = None) -> str:
 if __name__ == "__main__":
     for q in [
         "What is the interest rate on the 1-year fixed deposit?",
-        "What is the exact penalty percentage for premature withdrawal?",
+        "What is the penalty percentage for premature withdrawal?",
     ]:
         print(f"\nQ: {q}\nA: {ask(q)}")
