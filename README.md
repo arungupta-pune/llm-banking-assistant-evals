@@ -17,14 +17,23 @@ checked automatically on every change:
   more probabilistic assertions, CI on every push.
 
 ## Stack
-Python · Anthropic API · pytest
+Python 3.10+ · Gemini API · pytest
 
 ## Run it
 ```bash
 python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
-cp .env.example .env        # then paste your ANTHROPIC_API_KEY
+export GOOGLE_API_KEY=your_key_here                 # Windows: set GOOGLE_API_KEY=your_key_here
 python assistant.py         # see it answer a known fact and refuse an unknown one
 pytest -v                   # run the guardrail suite
 ```
 
+## Design notes
+
+- The refusal phrase (`REFUSAL_PHRASE`) is defined once in `assistant.py` and
+  shared with the test suite — a wording change in the system prompt is
+  automatically reflected in test assertions.
+- `load_fact_sheet` is cached (`lru_cache`) so the file is read only once per
+  process regardless of how many `ask()` calls are made.
+- The Gemini client is instantiated lazily on the first `ask()` call, so
+  importing `assistant` is always safe even without credentials set.
