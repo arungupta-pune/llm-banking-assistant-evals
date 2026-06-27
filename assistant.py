@@ -12,7 +12,7 @@ from google.genai import types
 
 load_dotenv()
 
-GEMINI_RPM: int = int(os.getenv("GEMINI_RPM", "6"))
+GEMINI_RPM: int = int(os.getenv("GEMINI_RPM", "5"))
 GEMINI_RPM_BUFFER_SECS: float = float(os.getenv("GEMINI_RPM_BUFFER_SECS", "2.0"))
 
 _request_times: deque[float] = deque()
